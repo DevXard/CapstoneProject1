@@ -82,6 +82,18 @@ class User(db.Model):
         db.session.add(user)
         return user
 
+    @classmethod
+    def authenticate(clsn, username, password):
+
+        user = clsn.query.filter_by(username=username).first()
+
+        if user:
+            auth = bcrypt.check_password_hash(user.password, password)
+            if auth:
+                return user
+        else:
+            return False
+
 class Book(db.Model):
     """ Creating a new Book"""
     __tablename__ = 'books'
@@ -91,12 +103,22 @@ class Book(db.Model):
         autoincrement=True
     )
 
+    type = db.Column(db.String(100),
+        nullable=False,
+        default='Story'
+    )
+
     title = db.Column(db.String(150),
         nullable=False,
         unique=True
     )
 
     description = db.Column(db.Text)
+
+    cover = db.Column(db.String, 
+        nullable=False, 
+        default='https://images.unsplash.com/photo-1549122728-f519709caa9c?ixid=MXwxMjA3fDB8MHxzZWFyY2h8OHx8Ym9va3xlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
+    )
 
     user_id = db.Column(
         db.Integer,
@@ -105,6 +127,16 @@ class Book(db.Model):
     )
 
     user = db.relationship('User', backref='books')
+
+    def serialize(self):
+        return{
+        'id': self.id,
+        'type': self.type,
+        'title': self.title,
+        'description': self.description,
+        'cover': self.cover,
+        'user_id': self.user_id
+    }
 
 class Page(db.Model, VersioningMixin):
     """ Creating pages for a Book"""
@@ -125,3 +157,4 @@ class Page(db.Model, VersioningMixin):
     )
 
     book = db.relationship('Book', backref='pages')
+

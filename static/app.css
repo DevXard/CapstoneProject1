@@ -1,3 +1,7 @@
+body{
+    background: #1B3746;
+}
+
 #landing-wrapper {
     display:table;
     width:100%;
@@ -26,6 +30,48 @@
     margin-top: 10%;
     background: linear-gradient( rgba(61, 60, 60, 0.5), rgba(0, 0, 0, 0.5) );
 }
+
+
+.fig1{
+    
+    width: 170px;
+    height: 737px;
+    background: #2c3e50;
+    border-radius: 17px;
+}
+.fig2{
+    right: 50%;
+    width: 100%;
+    height: 737px;
+    background: #1B3746;
+    border: 1px solid #000000;
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+
+
+::-webkit-scrollbar {
+    
+    width: 7px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: gainsboro; 
+    box-shadow: inset 0 0 5px grey; 
+    border-radius: 18px;
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #172d38; 
+    border-radius: 18px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #0d0b11; 
+  }
 
 .footer-bs {
     background-color: #3c3d41;
