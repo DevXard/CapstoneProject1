@@ -15,4 +15,8 @@ class UserLoginForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
 
-# class BookCreateForm(FlaskForm):
+class BookCreateForm(FlaskForm):
+    type = StringField("Type")
+    title = StringField("Title", validators=[DataRequired()])
+    description = StringField("Description")
+    cover = StringField("Cover Image URL")

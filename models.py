@@ -23,12 +23,12 @@ class Likes(db.Model):
 
     user_id = db.Column(
         db.Integer,
-        db.ForeignKey('users.id', ondelete='cascade')
+        db.ForeignKey('users.id',  ondelete='CASCADE')
     )
 
     book_id = db.Column(
         db.Integer,
-        db.ForeignKey('books.id', ondelete='cascade'),
+        db.ForeignKey('books.id',  ondelete='CASCADE'),
         unique=True
     )
 
@@ -122,7 +122,7 @@ class Book(db.Model):
 
     user_id = db.Column(
         db.Integer,
-        db.ForeignKey("users.id"),
+        db.ForeignKey("users.id", ondelete='CASCADE' ),
         nullable=False
     )
 
@@ -146,7 +146,7 @@ class Page(db.Model, VersioningMixin):
         primary_key=True,
         autoincrement=True
     )
-    page_title = db.Column(db.Unicode(150))
+    page_title = db.Column(db.Unicode)
 
     content = db.Column(db.UnicodeText)
 
@@ -157,4 +157,12 @@ class Page(db.Model, VersioningMixin):
     )
 
     book = db.relationship('Book', backref='pages')
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'page_title': self.page_title,
+            'content': self.content,
+            'book_id': self.book_id
+        }
 

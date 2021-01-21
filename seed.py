@@ -10,7 +10,7 @@ u3 = User.signup(username='user3', password='user3Pass', email='user3@user.com')
 u4 = User.signup(username='user4', password='user4Pass', email='user4@user.com')
 u5 = User.signup(username='user5', password='user5Pass', email='user5@user.com')
 
-# db.session.add_all([u1, u2, u3, u4, u5]) Try without adding becouse signup adds them to session
+db.session.add_all([u1, u2, u3, u4, u5]) 
 db.session.commit()
 
 b1 = Book(title='Some Book', description='talks about a book', user_id=u1.id)

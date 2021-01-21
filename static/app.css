@@ -49,6 +49,20 @@ body{
     border-radius: 10px;
 }
 
+.fig3{
+    width: 1095px;
+    height: 596px;
+    background: #fdfeff;
+    border-radius: 25px;
+}
+
+.pagesContainer{
+    width: 100%;
+    height: 596px;
+    background: #1B3746;
+    border: 1px solid #7c7676;
+    border-radius: 25px;
+}
 
 ::-webkit-scrollbar {
     

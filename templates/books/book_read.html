@@ -1,0 +1,35 @@
+{% extends 'base.html'  %}
+
+{% block title %} Read Books {% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-2 col-md-1  m-2">
+            <div class="fig1">
+                
+            </div>
+        </div>
+        <div class="col-lg-9 col-md-0  m-2">
+            <div class="fig2">
+                <div class="center">
+                    <h1 class="text center">{{book.title}}</h1>
+                    <div class="d-flex">
+                        <a class="btn btn-sm btn-success m-1"href="/book/{{book.id}}/edit-book">Edit Book</a>
+                        <form action="/book/{{book.id}}/delete" method="POST">
+                            <button class="btn btn-sm btn-danger m-1">Delete</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="container-fluid, center">
+                    <div class="pagesContainer overflow-auto">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>      
+</div>
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html'  %}
+
+{% block title %} Edit Book {% endblock %}
+
+{% block content %}
+<div class="fig2 ">
+<div class="row justify-content-md-center welcome">
+    <div class="col-md-7 col-lg-5">
+      <h2 class="join-message text center">Join Storytime Now.</h2>
+      <form method="POST" id="user_form">
+        {{ form.hidden_tag() }}
+  
+        {% for field in form if field.widget.input_type != 'hidden' %}
+          {% for error in field.errors %}
+            <span class="text-danger">{{ error }}</span>
+          {% endfor %}
+          {{ field(placeholder=field.label.text, class="form-control m-1") }}
+        {% endfor %}
+  
+        <button class="btn btn-success btn-lg btn-block m-1">Edit Book</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

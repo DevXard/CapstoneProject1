@@ -11,7 +11,7 @@ async function getAllBooks(e){
 
     res = await axios.get('/api/books');
     list = res.data.books;
-    
+    this.user = res.data.user
     listBooks(list)
 }
 
@@ -33,27 +33,36 @@ function listBooks(books, userId) {
         if(userId){
             if(userId == book.user_id){
                 bookCard(book)
+                $(`#${book.id}`).append(`
+                <a href="book/${book.id}/write" class="btn btn-primary m-1">Write</a>
+                `)
             }
         }else{
             bookCard(book)
+            
+            if(this.user === book.user_id){
+                $(`#${book.id}`).append(`
+                <a href="book/${book.id}/write" class="btn btn-primary m-1">Write</a>
+                `)
+            }
         }
     }
 }
 
-function bookCard(book){
+function bookCard(book, userId){
+    
     $('#books').append(`
     <div class="col-auto">
     <div class="card m-1" style="width: 18rem;">
         <img class="card-img-top" src="${book.cover}" alt="Card image cap">
-        <div class="card-body">
+        <div id="${book.id}" class="card-body">
           <h5 class="card-title">${book.title}</h5>
           <p class="card-text">${book.description}</p>
-          <a href="#" class="btn btn-primary">Go To Book</a>
+          <a href="book/${book.id}/read" class="btn btn-success m-1">Read Book</a>
         </div>
       </div>
     </div>
     `)
 }
-
 
 getAllBooks()
