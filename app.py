@@ -2,8 +2,9 @@ from flask import Flask, render_template, redirect, flash, session, g, jsonify, 
 from flask_debugtoolbar import DebugToolbarExtension
 
 from forms import UserSignupForm, UserLoginForm, BookCreateForm
-from models import db, connect_db, User, Book, Page
+from models import db, connect_db, User, Book, Page, version_serializer
 from sqlalchemy.exc import IntegrityError
+import json
 import pdb
 
 CURRENT_USER = 'user'
@@ -242,11 +243,187 @@ def add_page(id):
         flash("This is not your Book")
         return redirect('/books')
     else:
-        pdb.set_trace()
+        
         page = Page(
             page_title=request.json['title'],
             book_id=book.id
             )
-        session.add(page)
-        session.commit()
+        db.session.add(page)
+        db.session.commit()
         return (jsonify(page=page.serialize()), 201)
+
+
+@app.route('/book/<int:id>/write/get-pages')
+def get_all_pages(id):
+    """ Send all pages connected to a book """
+
+    if not g.user:
+        flash('You have to Login')
+        return redirect('/')
+
+    book = Book.query.get_or_404(id)
+
+    if book.user_id != g.user.id:
+        flash("This is not your Book")
+        return redirect('/books')
+    else:
+        pages = [page.serialize() for page in book.pages]
+
+        return jsonify(pages=pages)
+
+# **********************************************************************
+#                             Create delete edit pages
+
+@app.route('/pages/<int:id>')
+def get_page(id):
+    """ View a page """
+    if not g.user:
+        flash('You have to Login')
+        return redirect('/')
+
+    page = Page.query.get_or_404(id)
+    book = Book.query.get_or_404(page.book_id)
+
+    if book.user_id != g.user.id:
+        flash("This is not your Book")
+        return redirect('/books')
+    # pdb.set_trace()
+    else:
+        return render_template('pages/page.html', page=page)
+
+@app.route('/pages/<int:id>/all-pages')
+def send_page_content(id):
+    """ Retreave all pages associated with current book"""
+    if not g.user:
+        flash('You have to Login')
+        return redirect('/')
+
+    page = Page.query.get_or_404(id)
+    book = Book.query.get_or_404(page.book_id)
+
+    if book.user_id != g.user.id:
+        flash("This is not your Book")
+        return redirect('/books')
+    else:
+        return jsonify(page=page.serialize())
+
+
+@app.route('/pages/<int:id>/save-page', methods=['POST'])
+def save_page(id):
+    """ create a new version of your exsisting page """
+    if not g.user:
+        flash('You have to Login')
+        return redirect('/')
+
+    page = Page.query.get_or_404(id)
+    book = Book.query.get_or_404(page.book_id)
+
+    if book.user_id != g.user.id:
+        flash("This is not your Book")
+        return redirect('/books')
+    else:
+        
+        string1 = jsonify(request.json)
+        
+        page.content = json.dumps(request.json)
+        db.session.commit()
+        
+
+        return jsonify(page=page.serialize())
+
+@app.route('/pages/<int:id>/delete', methods=['DELETE'])
+def delete_page_and_versions(id):
+    if not g.user:
+        flash('You have to Login')
+        return redirect('/')
+
+    page = Page.query.get_or_404(id)
+    book = Book.query.get_or_404(page.book_id)
+
+    if book.user_id != g.user.id:
+        flash("This is not your Book")
+        return redirect('/books')
+    else:
+        for version in page.versions.all():
+            db.session.delete(version)
+        db.session.commit()
+
+        db.session.delete(page)
+        db.session.commit()
+        return jsonify(book=book.serialize())
+
+# *******************************************************************************
+# Delete version page
+
+@app.route('/pages/<int:id>/delete/<int:ver_id>', methods=['DELETE'])
+def delete_version(id, ver_id):
+    """ Delete version of a page """
+    if not g.user:
+        flash('You have to Login')
+        return redirect('/')
+
+    page = Page.query.get_or_404(id)
+    book = Book.query.get_or_404(page.book_id)
+
+    if book.user_id != g.user.id:
+        flash("This is not your Book")
+        return redirect('/books')
+    else:
+        for p_v in page.versions.all():
+            if p_v.transaction_id == ver_id:
+                db.session.delete(p_v)
+                db.session.commit()
+
+        vers = [version_serializer(ver) for ver in page.versions.all()]
+
+        return jsonify(vers=vers)
+    
+
+# **************************************************************
+#                 All Pages Versions
+
+@app.route('/pages/<int:id>/versions')
+def get_page_versions(id):
+
+    if not g.user:
+        flash('You have to Login')
+        return redirect('/')
+
+    page = Page.query.get_or_404(id)
+    book = Book.query.get_or_404(page.book_id)
+
+    if book.user_id != g.user.id:
+        flash("This is not your Book")
+        return redirect('/books')
+    else:
+        
+        vers = [version_serializer(ver) for ver in page.versions.all()]
+        
+
+        return jsonify(vers=vers)
+
+@app.route('/pages/<int:id>/revert/<int:ver_id>', methods=['POST'])
+def revert_to_version(id, ver_id):
+
+    if not g.user:
+        flash('You have to Login')
+        return redirect('/')
+
+    page = Page.query.get_or_404(id)
+    book = Book.query.get_or_404(page.book_id)
+
+    if book.user_id != g.user.id:
+        flash("This is not your Book")
+        return redirect('/books')
+    else:
+        for version in page.versions.all():
+            if version.transaction_id == ver_id:
+                version.revert()
+                db.session.commit()
+                db.session.delete(version)
+                db.session.commit()
+            
+        vers = [version_serializer(ver) for ver in page.versions.all()]
+        
+
+        return jsonify(vers=vers)

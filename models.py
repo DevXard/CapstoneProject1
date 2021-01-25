@@ -148,7 +148,7 @@ class Page(db.Model, VersioningMixin):
     )
     page_title = db.Column(db.Unicode)
 
-    content = db.Column(db.UnicodeText)
+    content = db.Column(db.UnicodeText, nullable=False, default='{"time": 1611366034645, "blocks": [{"type": "paragraph", "data": {"text": ""}}], "version": "2.19.1"}')
 
     book_id = db.Column(
         db.Integer,
@@ -166,3 +166,12 @@ class Page(db.Model, VersioningMixin):
             'book_id': self.book_id
         }
 
+
+def version_serializer(self):
+    return {
+        'id': self.id,
+        'page_title': self.page_title,
+        'content': self.content,
+        'book_id': self.book_id,
+        'transaction_id': self.transaction_id
+    }
