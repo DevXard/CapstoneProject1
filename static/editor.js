@@ -19,7 +19,7 @@ async function getPagesVersion(e){
     uiExpand()
     let url = $(location).attr('href');
     res = await axios.get(`${url}/versions`)
-    
+    console.log(res)
     listVersions(res.data.vers)
 }
 
@@ -158,4 +158,4 @@ async function getPageData() {
       });
 }
 
-getPageData()
+$(document).ready(getPageData()) 

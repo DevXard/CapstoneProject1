@@ -54,6 +54,15 @@ body{
     transition: 1s;
 }
 
+.big{
+    font-size:600px
+}
+
+.chapters{
+   
+    background:#b4def5;
+}
+
 .hide{
     display: none;
     
@@ -178,3 +187,4 @@ body{
 @media (min-width: 768px) {
 	.footer-bs .footer-nav, .footer-bs .footer-social, .footer-bs .footer-ns { border-left:solid 1px rgba(255,255,255,0.10); }
 }
+

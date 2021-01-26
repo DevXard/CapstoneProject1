@@ -150,7 +150,7 @@ def create_book():
 
 
 # *******************************************************************************
-#        Book Writing and Reading
+#        Book Writing and Reading View
 
 @app.route('/book/<int:id>/write')
 def write_book(id):
@@ -177,6 +177,10 @@ def read_book(id):
     book = Book.query.get_or_404(id)
 
     return render_template('books/book_read.html', book=book)
+
+# *******************************************************************************
+# *******************************************************************************
+#                    Writing Book Functionality
 
 # *******************************************************************************
 #                Edit and delete a Book
@@ -427,3 +431,30 @@ def revert_to_version(id, ver_id):
         
 
         return jsonify(vers=vers)
+
+
+# ******************************************************************************
+# *******************************************************************************
+#                     Reading Books Functionality
+
+@app.route('/book/<int:id>/read/pages')
+def all_reed_pages(id):
+    """ Send all avaleble pages to frontend"""
+    if not g.user:
+        flash('You have to Login')
+        return redirect('/')
+
+    
+    book = Book.query.get_or_404(id)
+
+    if book.user_id != g.user.id:
+        flash("This is not your Book")
+        return redirect('/books')
+    else:
+        
+        pages = [page.serialize() for page in book.pages]
+
+
+        return jsonify(pages=pages)
+
+
