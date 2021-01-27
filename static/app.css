@@ -64,6 +64,10 @@ body{
     transform:translate(3%)
 }
 
+.liked{
+    color: yellow;
+}
+
 .chapters{
    
     background:#b4def5;

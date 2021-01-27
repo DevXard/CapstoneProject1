@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, flash, session, g, jsonify, 
 from flask_debugtoolbar import DebugToolbarExtension
 
 from forms import UserSignupForm, UserLoginForm, BookCreateForm
-from models import db, connect_db, User, Book, Page, version_serializer
+from models import db, connect_db, User, Book, Likes, Page, version_serializer
 from sqlalchemy.exc import IntegrityError
 import json
 from api_calls import movies_muse
@@ -113,12 +113,16 @@ def all_books():
 @app.route('/api/books')
 def all_books_json():
     """ Serving Json so there is no reload when brousing allbooks and my books """
+
     if not g.user:
         flash('You have to Login')
         return redirect('/')
     else:
         books = [book.serialize() for book in Book.query.all()]
-        return jsonify(books=books, user=g.user.id)
+        
+        likes = [like.likes_serialize() for like in Likes.query.all()]
+        
+        return jsonify(books=books, user=g.user.id, likes=likes)
 
 
 # *******************************************************************************
@@ -458,7 +462,8 @@ def all_reed_pages(id):
 
         return jsonify(pages=pages)
 
-
+# ******************************************************************************
+#                  Gettiong data form movies api
 @app.route('/api/movies')
 def api_movies():
 
@@ -470,3 +475,35 @@ def api_movies():
     data = movies_muse(query)
     
     return jsonify(data=data)
+
+# *****************************************************************************
+#                  Adding like
+
+@app.route('/add-remove-like/<int:id>', methods=['POST'])
+def add_remove_like(id):
+    q = Likes.query.filter_by(user_id=g.user.id, book_id=id).first()
+    if q:
+        db.session.delete(q)
+        db.session.commit()
+    else:
+        like = Likes(user_id=g.user.id, book_id=id)
+        db.session.add(like)
+        db.session.commit()
+    
+    return jsonify('query=query')
+
+# *****************************************************************************
+#                    API book search
+
+@app.route('/api/search')
+def search_book():
+    if not g.user:
+        flash('You have to Login')
+        return redirect('/')
+    term = request.args['term']
+    
+    b = Book.query.filter(Book.title.ilike(f'%{term}%')).all()
+
+    results = [book.serialize() for book in b]
+    
+    return jsonify(books=results)

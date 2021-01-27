@@ -31,6 +31,12 @@ class Likes(db.Model):
         db.ForeignKey('books.id',  ondelete='CASCADE'),
         unique=True
     )
+    def likes_serialize(self):
+        return{
+        'id': self.id,
+        'book_id': self.book_id,
+        'user_id': self.user_id
+        }
 
 class User(db.Model):
     """ Creating and securing user account"""
