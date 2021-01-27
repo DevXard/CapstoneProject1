@@ -5,6 +5,7 @@ from forms import UserSignupForm, UserLoginForm, BookCreateForm
 from models import db, connect_db, User, Book, Page, version_serializer
 from sqlalchemy.exc import IntegrityError
 import json
+from api_calls import movies_muse
 import pdb
 
 CURRENT_USER = 'user'
@@ -458,3 +459,14 @@ def all_reed_pages(id):
         return jsonify(pages=pages)
 
 
+@app.route('/api/movies')
+def api_movies():
+
+    if not g.user:
+        flash('You have to Login')
+        return redirect('/')
+    query = request.args['query']
+
+    data = movies_muse(query)
+    
+    return jsonify(data=data)

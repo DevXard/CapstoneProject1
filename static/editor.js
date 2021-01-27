@@ -110,6 +110,8 @@ function uiExpand() {
     $('#shrink').toggleClass('hide')
     $('#all-versions').toggleClass('hide')
     $('#back-button').toggleClass('hide')
+    $('#brouse-movies').toggleClass('hide')
+    $('#movie-search').toggleClass('hide')
 }
 
 // Return UI to original state
@@ -122,6 +124,8 @@ function resetUI(e) {
     $('#shrink').toggleClass('hide',10000)
     $('#all-versions').toggleClass('hide')
     $('#back-button').toggleClass('hide')
+    $('#brouse-movies').toggleClass('hide')
+    $('#movie-search').toggleClass('hide')
 }
 
 //  Request the page Content from the server and add it to the eddiotor

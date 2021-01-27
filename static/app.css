@@ -58,6 +58,12 @@ body{
     font-size:600px
 }
 
+#movie-search{
+    border-radius: 15%;
+    border: none;
+    transform:translate(3%)
+}
+
 .chapters{
    
     background:#b4def5;
