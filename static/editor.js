@@ -112,6 +112,10 @@ function uiExpand() {
     $('#back-button').toggleClass('hide')
     $('#brouse-movies').toggleClass('hide')
     $('#movie-search').toggleClass('hide')
+    $('#song-search').toggleClass('hide')
+    $('#song-artist').toggleClass('hide')
+    $('#song-title').toggleClass('hide')
+    $('#search-lyrics').toggleClass('hide')
 }
 
 // Return UI to original state
@@ -126,6 +130,10 @@ function resetUI(e) {
     $('#back-button').toggleClass('hide')
     $('#brouse-movies').toggleClass('hide')
     $('#movie-search').toggleClass('hide')
+    $('#song-search').toggleClass('hide')
+    $('#song-artist').toggleClass('hide')
+    $('#song-title').toggleClass('hide')
+    $('#search-lyrics').toggleClass('hide')
 }
 
 //  Request the page Content from the server and add it to the eddiotor

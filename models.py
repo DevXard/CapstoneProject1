@@ -32,6 +32,7 @@ class Likes(db.Model):
         unique=True
     )
     def likes_serialize(self):
+        """ serialize likes """
         return{
         'id': self.id,
         'book_id': self.book_id,
@@ -90,7 +91,7 @@ class User(db.Model):
 
     @classmethod
     def authenticate(clsn, username, password):
-
+        """ Authenticate a user"""
         user = clsn.query.filter_by(username=username).first()
 
         if user:
@@ -135,6 +136,7 @@ class Book(db.Model):
     user = db.relationship('User', backref='books')
 
     def serialize(self):
+        """ Serialize a Book """
         return{
         'id': self.id,
         'type': self.type,
@@ -165,6 +167,7 @@ class Page(db.Model, VersioningMixin):
     book = db.relationship('Book', backref='pages')
 
     def serialize(self):
+        """ Serialize page """
         return {
             'id': self.id,
             'page_title': self.page_title,
@@ -174,6 +177,10 @@ class Page(db.Model, VersioningMixin):
 
 
 def version_serializer(self):
+    """ Versions serializer 
+        The version serializer is out of the class methot becouse it
+        is serializing versions from Continuum
+    """
     return {
         'id': self.id,
         'page_title': self.page_title,

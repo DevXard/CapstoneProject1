@@ -5,7 +5,7 @@ from forms import UserSignupForm, UserLoginForm, BookCreateForm
 from models import db, connect_db, User, Book, Likes, Page, version_serializer
 from sqlalchemy.exc import IntegrityError
 import json
-from api_calls import movies_muse
+from api_calls import movies_muse, song_l
 import pdb
 
 CURRENT_USER = 'user'
@@ -69,6 +69,7 @@ def signup():
 
 @app.route('/login', methods=['GET', 'POST'])
 def user_login():
+    """ Login page"""
     form = UserLoginForm()
 
     if form.validate_on_submit():
@@ -94,7 +95,7 @@ def user_logout():
 
 @app.route('/')
 def index():
-    # pdb.set_trace()
+    """ Render the Welcome page """
     return render_template('index.html')
 
 
@@ -342,6 +343,7 @@ def save_page(id):
 
 @app.route('/pages/<int:id>/delete', methods=['DELETE'])
 def delete_page_and_versions(id):
+    """ Delete a page and all versions """
     if not g.user:
         flash('You have to Login')
         return redirect('/')
@@ -393,7 +395,7 @@ def delete_version(id, ver_id):
 
 @app.route('/pages/<int:id>/versions')
 def get_page_versions(id):
-
+    """ Given a page id send Json with all versions data """
     if not g.user:
         flash('You have to Login')
         return redirect('/')
@@ -413,7 +415,7 @@ def get_page_versions(id):
 
 @app.route('/pages/<int:id>/revert/<int:ver_id>', methods=['POST'])
 def revert_to_version(id, ver_id):
-
+    """ Using the page and the version Id revert to old version when resceve a reuqest """
     if not g.user:
         flash('You have to Login')
         return redirect('/')
@@ -466,7 +468,7 @@ def all_reed_pages(id):
 #                  Gettiong data form movies api
 @app.route('/api/movies')
 def api_movies():
-
+    """ Send Movie data to frontend"""
     if not g.user:
         flash('You have to Login')
         return redirect('/')
@@ -481,6 +483,7 @@ def api_movies():
 
 @app.route('/add-remove-like/<int:id>', methods=['POST'])
 def add_remove_like(id):
+    """ Add and remove likes from database """
     q = Likes.query.filter_by(user_id=g.user.id, book_id=id).first()
     if q:
         db.session.delete(q)
@@ -497,6 +500,7 @@ def add_remove_like(id):
 
 @app.route('/api/search')
 def search_book():
+    """ Filter book and return """
     if not g.user:
         flash('You have to Login')
         return redirect('/')
@@ -507,3 +511,18 @@ def search_book():
     results = [book.serialize() for book in b]
     
     return jsonify(books=results)
+
+# *****************************************************************************
+#         Song lyrics search
+
+@app.route('/api/song_lirycs')
+def song_lirycs():
+    if not g.user:
+        flash('You have to Login')
+        return redirect('/')
+
+    artist = request.args['artist']
+    title = request.args['title']
+    
+    data = song_l(artist, title)
+    return jsonify(data=data)
