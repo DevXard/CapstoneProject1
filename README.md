@@ -20,13 +20,12 @@
 
 ### API and Databa
 ---
-> The API's will be Open Librari for book descriptions.
+> Songs Lyrics API for getting insperation from songs
 >
 > The movie database for movies description.
 > 
-> Unsplash vor photos and visual insperation.
-> 
-> Wikipedia API for researching articles.
+> Unsplash vor photos and visual insperation (optional).
+
 
 ### Database 
 > ![Alt text](/static/pics/db_model.png)
