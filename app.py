@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, redirect, flash, session, g, jsonify, request
 from flask_debugtoolbar import DebugToolbarExtension
 
@@ -6,7 +7,7 @@ from models import db, connect_db, User, Book, Likes, Page, version_serializer
 from sqlalchemy.exc import IntegrityError
 import json
 from api_calls import movies_muse, song_l
-import pdb
+
 
 CURRENT_USER = 'user'
 
@@ -15,7 +16,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///story_time_db'
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config['SQLALCHEMY_ECHO'] = True
-app.config['SECRET_KEY'] = 'af32f2g5647'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'asf23w')
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 debug = DebugToolbarExtension(app)
 
