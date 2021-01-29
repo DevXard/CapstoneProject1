@@ -61,3 +61,36 @@
 > and revert to the previus content of the page.
 > 
 > On the left the writer can search and look at  book summaryes, movie plots and more to get inspired.
+
+# Completion
+
+### Project Name is [StoryTime](https://story-time-cap1-proj.herokuapp.com/)
+
+> Story time is a place where writers can create Books, Comic and more 
+> then readers can enjoy there work.
+> 
+> StoryTime keaps track of every chapters version and with a simple click a writer can revew all the versions
+> and can rever to a older version with a simple click.
+> 
+> Writers can search through movies plots for insperation about the general story.
+> 
+> Writers also have acces to read through lyrics of there favoret song.
+
+
+### Features
+> Liking books
+> 
+> Searching through the website Books to quicly find the book you like
+> 
+> Version control for pages/chapters with  options to revert back or delete version for bether writers experiance
+> 
+> Searching through movies plots for writers insperation
+> 
+> Searching song lyrycs for writers insperation
+> 
+> A separate Route for Reading books for bether readers experiance
+
+### Tecnologie stack 
+
+> * Python/flask/javascript/jQuery/bootstrap/postgresql
+> * Flask-continuum
