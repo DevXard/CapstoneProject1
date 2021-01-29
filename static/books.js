@@ -43,7 +43,7 @@ $('#books').on('click','.fa-star', function(){
 })
 
 function likes(likes, books){
-    
+    if(!Array.isArray(books))return
     for(let i = 0; i < likes.length; i++){
         if(likes[i].user_id === this.user){
             $( `#${books[i].id}`).find(`
@@ -54,6 +54,7 @@ function likes(likes, books){
 }
 
 function listBooks(books, userId) {
+    if(!Array.isArray(books))return
     for(let book of books){
         if(userId){
             if(userId == book.user_id){
