@@ -28,8 +28,7 @@
 
 
 ### Database 
-> ![Alt text](/static/pics/db_model.png)
-
+> ![Alt text](/static/pics/DbStoryTime.png) 
 ### Functionality
 ---
 > The app will be able to ceap diferent versions of a page and
